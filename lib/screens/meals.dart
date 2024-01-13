@@ -4,9 +4,9 @@ import 'package:flutter_chapter_8/screens/meal_details.dart';
 import 'package:flutter_chapter_8/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({Key? key, required this.title, required this.meals})
+  const MealsScreen({Key? key, this.title, required this.meals})
       : super(key: key);
-  final String title;
+  final String? title;
   final List<Meal> meals;
   void selectMeal(BuildContext context, Meal meal) {
     //context -> cung cấp thông tin về vị trí widget trong tree BuildContext giúp Flutter "biết" nơi để đặt UI mới của bạn trong cây widget.
@@ -52,19 +52,15 @@ class MealsScreen extends StatelessWidget {
                 onSelectMeal: (meal) {
                   selectMeal(context, meal);
                 },
-              )
-          // Text(
-          //   meals[index].title,
-          //   // style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-          //   //       color: Theme.of(context).colorScheme.onBackground,
-          //   //     ),
-          // ),
-          );
+              ));
+    }
+    if (title == null) {
+      return content;
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          title,
+          title!,
         ),
       ),
       body: content,
