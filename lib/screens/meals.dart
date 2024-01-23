@@ -4,16 +4,22 @@ import 'package:flutter_chapter_8/screens/meal_details.dart';
 import 'package:flutter_chapter_8/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({Key? key, this.title, required this.meals})
+  const MealsScreen(
+      {Key? key,
+      this.title,
+      required this.meals,
+      required this.onToggleFavorite})
       : super(key: key);
   final String? title;
   final List<Meal> meals;
+  final void Function(Meal meal) onToggleFavorite;
   void selectMeal(BuildContext context, Meal meal) {
     //context -> cung cấp thông tin về vị trí widget trong tree BuildContext giúp Flutter "biết" nơi để đặt UI mới của bạn trong cây widget.
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MealDetails(
           meal: meal,
+          onToggleFavorite: onToggleFavorite,
         ),
       ),
     );
