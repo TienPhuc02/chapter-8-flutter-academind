@@ -14,7 +14,6 @@ class MealsScreen extends StatelessWidget {
   final List<Meal> meals;
   final void Function(Meal meal) onToggleFavorite;
   void selectMeal(BuildContext context, Meal meal) {
-    //context -> cung cấp thông tin về vị trí widget trong tree BuildContext giúp Flutter "biết" nơi để đặt UI mới của bạn trong cây widget.
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MealDetails(

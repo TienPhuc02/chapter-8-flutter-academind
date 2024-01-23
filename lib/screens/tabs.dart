@@ -13,12 +13,23 @@ class tabsScreen extends StatefulWidget {
 class _tabsScreen extends State<tabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favoriteMeals = [];
+  void _showInfoMessage(String mess) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess)));
+  }
+
   void _toggleMealFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
     if (isExisting == true) {
-      _favoriteMeals.remove(meal);
+      setState(() {
+        _favoriteMeals.remove(meal);
+      });
+      _showInfoMessage("Bữa ăn không còn là món yêu thích");
     } else {
-      _favoriteMeals.add(meal);
+      setState(() {
+        _favoriteMeals.add(meal);
+      });
+      _showInfoMessage("Đã được đánh dấu là yêu thích");
     }
   }
 
@@ -36,7 +47,7 @@ class _tabsScreen extends State<tabsScreen> {
     var activePageTitle = "Categories";
     if (_selectedPageIndex == 1) {
       activePage = MealsScreen(
-        meals: [],
+        meals: _favoriteMeals,
         onToggleFavorite: _toggleMealFavoriteStatus,
       );
       activePageTitle = "Your Favorite";
@@ -52,7 +63,7 @@ class _tabsScreen extends State<tabsScreen> {
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.set_meal), label: "Categories"),
-          BottomNavigationBarItem(icon: Icon(Icons.start), label: "Favorites"),
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: "Favorites"),
         ],
       ),
     );
