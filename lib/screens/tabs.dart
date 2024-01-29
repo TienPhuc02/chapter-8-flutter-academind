@@ -40,6 +40,13 @@ class _tabsScreen extends State<tabsScreen> {
     });
   }
 
+  void _setScreen(String identifier) {
+    if (identifier == "tìm kiếm") {
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = CategoriesScreen(
@@ -57,7 +64,9 @@ class _tabsScreen extends State<tabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      drawer: const MainDrawer(),
+      drawer: MainDrawer(
+        onSelectScreen: _setScreen,
+      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
