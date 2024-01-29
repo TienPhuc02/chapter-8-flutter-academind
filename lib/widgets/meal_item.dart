@@ -14,7 +14,7 @@ class MealsItem extends StatelessWidget {
   }
 
   String get affordabilityText {
-    return meal.affordability.name[0].toUpperCase() +
+    return meal.affordability.name[0].toString() +
         meal.affordability.name.substring(1);
   }
 

@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_chapter_8/models/meal.dart";
 import "package:flutter_chapter_8/screens/categories.dart";
 import "package:flutter_chapter_8/screens/meals.dart";
+import "package:flutter_chapter_8/widgets/main_drawer.dart";
 
 class tabsScreen extends StatefulWidget {
   const tabsScreen({super.key});
@@ -44,26 +45,28 @@ class _tabsScreen extends State<tabsScreen> {
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleMealFavoriteStatus,
     );
-    var activePageTitle = "Categories";
+    var activePageTitle = "Thể loại";
     if (_selectedPageIndex == 1) {
       activePage = MealsScreen(
         meals: _favoriteMeals,
         onToggleFavorite: _toggleMealFavoriteStatus,
       );
-      activePageTitle = "Your Favorite";
+      activePageTitle = "Cái bạn thích nhất";
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
+      drawer: const MainDrawer(),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         currentIndex: _selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.set_meal), label: "Categories"),
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: "Favorites"),
+              icon: Icon(Icons.set_meal), label: "Thể loại"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.star), label: "Cái bạn thích nhất"),
         ],
       ),
     );
