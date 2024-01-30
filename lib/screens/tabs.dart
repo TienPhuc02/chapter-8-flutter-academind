@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_chapter_8/models/meal.dart";
 import "package:flutter_chapter_8/screens/categories.dart";
+import "package:flutter_chapter_8/screens/filters.dart";
 import "package:flutter_chapter_8/screens/meals.dart";
 import "package:flutter_chapter_8/widgets/main_drawer.dart";
 
@@ -41,9 +42,10 @@ class _tabsScreen extends State<tabsScreen> {
   }
 
   void _setScreen(String identifier) {
+    Navigator.of(context).pop();
     if (identifier == "tìm kiếm") {
-    } else {
-      Navigator.of(context).pop();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
     }
   }
 
