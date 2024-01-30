@@ -41,11 +41,15 @@ class _tabsScreen extends State<tabsScreen> {
     });
   }
 
-  void _setScreen(String identifier) {
+  void _setScreen(String identifier) async {
     Navigator.of(context).pop();
     if (identifier == "tìm kiếm") {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
+      final results = await Navigator.of(context).push<Map<Filter, bool>>(
+        MaterialPageRoute(
+          builder: (ctx) => const FiltersScreen(),
+        ),
+      );
+      print(results);
     }
   }
 

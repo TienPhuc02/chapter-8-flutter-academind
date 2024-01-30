@@ -96,26 +96,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
               contentPadding: const EdgeInsets.only(left: 34, right: 22),
             ),
             SwitchListTile(
-              value: _glutenFreeFilterSet,
-              onChanged: (isChecked) {
-                setState(() {
-                  _glutenFreeFilterSet = isChecked;
-                });
-              },
-              title: Text(
-                "Không chứa gluten",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground),
-              ),
-              subtitle: Text(
-                "chỉ bao gồm các bữa ăn không chứa gluten",
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground),
-              ),
-              activeColor: Theme.of(context).colorScheme.tertiary,
-              contentPadding: const EdgeInsets.only(left: 34, right: 22),
-            ),
-            SwitchListTile(
               value: _veganFreeFilterSet,
               onChanged: (isChecked) {
                 setState(() {
