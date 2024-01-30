@@ -1,9 +1,17 @@
 import "package:flutter/material.dart";
+import "package:flutter_chapter_8/data/dummy_data.dart";
 import "package:flutter_chapter_8/models/meal.dart";
 import "package:flutter_chapter_8/screens/categories.dart";
 import "package:flutter_chapter_8/screens/filters.dart";
 import "package:flutter_chapter_8/screens/meals.dart";
 import "package:flutter_chapter_8/widgets/main_drawer.dart";
+
+const kInitialFilters = {
+  Filter.glutenFree: false,
+  Filter.lactoseFree: false,
+  Filter.veganFree: false,
+  Filter.vegetarianFree: false
+};
 
 class tabsScreen extends StatefulWidget {
   const tabsScreen({super.key});
@@ -15,6 +23,12 @@ class tabsScreen extends StatefulWidget {
 class _tabsScreen extends State<tabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favoriteMeals = [];
+  Map<Filter, bool> _selectFilter = {
+    Filter.glutenFree: false,
+    Filter.lactoseFree: false,
+    Filter.veganFree: false,
+    Filter.vegetarianFree: false
+  };
   void _showInfoMessage(String mess) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess)));
@@ -46,17 +60,38 @@ class _tabsScreen extends State<tabsScreen> {
     if (identifier == "tìm kiếm") {
       final results = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (ctx) => const FiltersScreen(),
+          builder: (ctx) => FiltersScreen(
+            currentFilters: _selectFilter,
+          ),
         ),
       );
+      setState(() {
+        _selectFilter = results ?? kInitialFilters;
+      });
       print(results);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final availableMeals = dummyMeals.where((meal) {
+      if (_selectFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (_selectFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (_selectFilter[Filter.veganFree]! && !meal.isVegan) {
+        return false;
+      }
+      if (_selectFilter[Filter.vegetarianFree]! && !meal.isVegetarian) {
+        return false;
+      }
+      return true;
+    }).toList();
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleMealFavoriteStatus,
+      availableMeals: availableMeals,
     );
     var activePageTitle = "Thể loại";
     if (_selectedPageIndex == 1) {

@@ -7,9 +7,11 @@ import 'package:flutter_chapter_8/widgets/category_grid_item.dart';
 import "package:flutter_chapter_8/models/category.dart" as MyCategory;
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({Key? key, required this.onToggleFavorite})
+  const CategoriesScreen(
+      {Key? key, required this.onToggleFavorite, required this.availableMeals})
       : super(key: key);
   final void Function(Meal meal) onToggleFavorite;
+  final List<Meal> availableMeals;
   void _selectCategory(
     BuildContext context,
     MyCategory.Category category,
