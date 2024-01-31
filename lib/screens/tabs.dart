@@ -1,51 +1,177 @@
-import "package:flutter/material.dart";
-import "package:flutter_chapter_8/data/dummy_data.dart";
-import "package:flutter_chapter_8/models/meal.dart";
-import "package:flutter_chapter_8/screens/categories.dart";
-import "package:flutter_chapter_8/screens/filters.dart";
-import "package:flutter_chapter_8/screens/meals.dart";
-import "package:flutter_chapter_8/widgets/main_drawer.dart";
+// import "package:flutter/material.dart";
+// import "package:flutter_chapter_8/data/dummy_data.dart";
+// import "package:flutter_chapter_8/models/meal.dart";
+// import "package:flutter_chapter_8/screens/categories.dart";
+// import "package:flutter_chapter_8/screens/filters.dart";
+// import "package:flutter_chapter_8/screens/meals.dart";
+// import "package:flutter_chapter_8/widgets/main_drawer.dart";
+
+// const kInitialFilters = {
+//   Filter.glutenFree: false,
+//   Filter.lactoseFree: false,
+//   Filter.veganFree: false,
+//   Filter.vegetarianFree: false
+// };
+
+// class tabsScreen extends StatefulWidget {
+//   const tabsScreen({super.key});
+
+//   @override
+//   State<tabsScreen> createState() => _tabsScreen();
+// }
+
+// class _tabsScreen extends State<tabsScreen> {
+//   int _selectedPageIndex = 0;
+//   final List<Meal> _favoriteMeals = [];
+//   Map<Filter, bool> _selectFilter = kInitialFilters;
+//   void _showInfoMessage(String mess) {
+//     ScaffoldMessenger.of(context).clearSnackBars();
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess)));
+//   }
+
+//   void _toggleMealFavoriteStatus(Meal meal) {
+//     final isExisting = _favoriteMeals.contains(meal);
+//     if (isExisting == true) {
+//       setState(() {
+//         _favoriteMeals.remove(meal);
+//       });
+//       _showInfoMessage("Bữa ăn không còn là món yêu thích");
+//     } else {
+//       setState(() {
+//         _favoriteMeals.add(meal);
+//       });
+//       _showInfoMessage("Đã được đánh dấu là yêu thích");
+//     }
+//   }
+
+//   void _selectPage(int index) {
+//     setState(() {
+//       _selectedPageIndex = index;
+//     });
+//   }
+
+//   void _setScreen(String identifier) async {
+//     Navigator.of(context).pop();
+//     if (identifier == "tìm kiếm") {
+//       final results = await Navigator.of(context).push<Map<Filter, bool>>(
+//         MaterialPageRoute(
+//           builder: (ctx) => FiltersScreen(
+//             currentFilters: _selectFilter,
+//           ),
+//         ),
+//       );
+//       print(results);
+//       setState(() {
+//         _selectFilter = results ?? kInitialFilters;
+//         print(_selectFilter);
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final availableMeals = dummyMeals.where((meal) {
+//       if (_selectFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
+//         return false;
+//       }
+//       if (_selectFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
+//         return false;
+//       }
+//       if (_selectFilter[Filter.veganFree]! && !meal.isVegan) {
+//         return false;
+//       }
+//       if (_selectFilter[Filter.vegetarianFree]! && !meal.isVegetarian) {
+//         return false;
+//       }
+//       return true;
+//     }).toList();
+//     print(availableMeals);
+//     Widget activePage = CategoriesScreen(
+//       onToggleFavorite: _toggleMealFavoriteStatus,
+//       availableMeals: availableMeals,
+//     );
+//     var activePageTitle = "Thể loại";
+//     if (_selectedPageIndex == 1) {
+//       activePage = MealsScreen(
+//         meals: _favoriteMeals,
+//         onToggleFavorite: _toggleMealFavoriteStatus,
+//       );
+//       activePageTitle = "Cái bạn thích nhất";
+//     }
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(activePageTitle),
+//       ),
+//       drawer: MainDrawer(
+//         onSelectScreen: _setScreen,
+//       ),
+//       body: activePage,
+//       bottomNavigationBar: BottomNavigationBar(
+//         onTap: _selectPage,
+//         currentIndex: _selectedPageIndex,
+//         items: const [
+//           BottomNavigationBarItem(
+//               icon: Icon(Icons.set_meal), label: "Thể loại"),
+//           BottomNavigationBarItem(
+//               icon: Icon(Icons.star), label: "Cái bạn thích nhất"),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+import 'package:flutter/material.dart';
+import 'package:flutter_chapter_8/data/dummy_data.dart';
+import 'package:flutter_chapter_8/models/meal.dart';
+import 'package:flutter_chapter_8/screens/categories.dart';
+import 'package:flutter_chapter_8/screens/filters.dart';
+import 'package:flutter_chapter_8/screens/meals.dart';
+import 'package:flutter_chapter_8/widgets/main_drawer.dart';
+
 
 const kInitialFilters = {
   Filter.glutenFree: false,
   Filter.lactoseFree: false,
-  Filter.veganFree: false,
-  Filter.vegetarianFree: false
+  Filter.vegetarian: false,
+  Filter.vegan: false
 };
 
-class tabsScreen extends StatefulWidget {
-  const tabsScreen({super.key});
+class TabsScreen extends StatefulWidget {
+  const TabsScreen({super.key});
 
   @override
-  State<tabsScreen> createState() => _tabsScreen();
+  State<TabsScreen> createState() {
+    return _TabsScreenState();
+  }
 }
 
-class _tabsScreen extends State<tabsScreen> {
+class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favoriteMeals = [];
-  Map<Filter, bool> _selectFilter = {
-    Filter.glutenFree: false,
-    Filter.lactoseFree: false,
-    Filter.veganFree: false,
-    Filter.vegetarianFree: false
-  };
-  void _showInfoMessage(String mess) {
+  Map<Filter, bool> _selectedFilters = kInitialFilters;
+
+  void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mess)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   void _toggleMealFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
-    if (isExisting == true) {
+
+    if (isExisting) {
       setState(() {
         _favoriteMeals.remove(meal);
       });
-      _showInfoMessage("Bữa ăn không còn là món yêu thích");
+      _showInfoMessage('Meal is no longer a favorite.');
     } else {
       setState(() {
         _favoriteMeals.add(meal);
+        _showInfoMessage('Marked as a favorite!');
       });
-      _showInfoMessage("Đã được đánh dấu là yêu thích");
     }
   }
 
@@ -57,50 +183,53 @@ class _tabsScreen extends State<tabsScreen> {
 
   void _setScreen(String identifier) async {
     Navigator.of(context).pop();
-    if (identifier == "tìm kiếm") {
-      final results = await Navigator.of(context).push<Map<Filter, bool>>(
+    if (identifier == 'filters') {
+      final result = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
           builder: (ctx) => FiltersScreen(
-            currentFilters: _selectFilter,
+            currentFilters: _selectedFilters,
           ),
         ),
       );
+
       setState(() {
-        _selectFilter = results ?? kInitialFilters;
+        _selectedFilters = result ?? kInitialFilters;
       });
-      print(results);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final availableMeals = dummyMeals.where((meal) {
-      if (_selectFilter[Filter.glutenFree]! && !meal.isGlutenFree) {
+      if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
-      if (_selectFilter[Filter.lactoseFree]! && !meal.isLactoseFree) {
+      if (_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
         return false;
       }
-      if (_selectFilter[Filter.veganFree]! && !meal.isVegan) {
+      if (_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian) {
         return false;
       }
-      if (_selectFilter[Filter.vegetarianFree]! && !meal.isVegetarian) {
+      if (_selectedFilters[Filter.vegan]! && !meal.isVegan) {
         return false;
       }
       return true;
     }).toList();
+
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleMealFavoriteStatus,
       availableMeals: availableMeals,
     );
-    var activePageTitle = "Thể loại";
+    var activePageTitle = 'Categories';
+
     if (_selectedPageIndex == 1) {
       activePage = MealsScreen(
         meals: _favoriteMeals,
         onToggleFavorite: _toggleMealFavoriteStatus,
       );
-      activePageTitle = "Cái bạn thích nhất";
+      activePageTitle = 'Your Favorites';
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
@@ -114,9 +243,13 @@ class _tabsScreen extends State<tabsScreen> {
         currentIndex: _selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.set_meal), label: "Thể loại"),
+            icon: Icon(Icons.set_meal),
+            label: 'Categories',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.star), label: "Cái bạn thích nhất"),
+            icon: Icon(Icons.star),
+            label: 'Favorites',
+          ),
         ],
       ),
     );
